@@ -1,0 +1,3 @@
+fastapi==0.141.1
+pydantic[email]==2.13.4
+resend==2.37.0

@@ -1,0 +1,30 @@
+# Node (frontend)
+frontend/node_modules
+frontend/dist
+frontend/dist-ssr
+*.local
+
+# Python (backend)
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Env / secrets
+.env
+.env.local
+
+# Vercel
+.vercel
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+desktop.ini
