@@ -10,6 +10,9 @@ if the conversation/session restarted.
 - **Email delivery:** Resend API (free tier, 3,000/mo).
 - **Deployment:** Single Vercel project — frontend build + FastAPI as one
   Python serverless function under `/api`, wired via `vercel.json` rewrites.
+  **Live at:** https://portfolio-eight-ruby-48.vercel.app/
+- **Repo:** https://github.com/SarthakTarar/Portfolio (public), branch `main`.
+  Pushing to `main` auto-redeploys on Vercel.
 - **Theme:** Dark, neon purple/blue/green, glassmorphism + glow-border cards,
   scroll animations via Framer Motion.
 - User wants to learn React syntax/patterns as we go — see `REACT_NOTES.md`
@@ -26,54 +29,71 @@ if the conversation/session restarted.
   Footer. Assembled in `frontend/src/App.jsx`.
 - Contact form: `react-hook-form` + `zod` validation, POSTs JSON to
   `/api/contact`, includes a honeypot field (frontend `Contact.jsx` +
-  backend `api/index.py`) for basic bot protection.
+  backend `api/index.py`) for basic bot protection. **Verified end-to-end
+  in production** — real Resend delivery confirmed to
+  `sarthaktarar750@gmail.com`.
 - Backend `api/index.py`: FastAPI app, validates payload with Pydantic,
   sends via Resend (`resend.Emails.send`), reads `RESEND_API_KEY` and
   `CONTACT_TO_EMAIL` from env vars. Local dev: `.env` file (see
-  `.env.example`), loaded via `python-dotenv` if installed.
-- Fixed a theme-token conflict in `frontend/src/index.css`: shadcn's
-  default light/dark palette was overriding the custom neon tokens: the
-  `.dark { ... }` block now maps shadcn's `--background`/`--border`/etc.
-  onto the custom `--color-bg`/`--color-neon-purple`/etc. tokens, and
-  `<html class="dark">` is set in `index.html` (site is dark-only, no toggle).
-- Swapped `lucide-react`'s `Github`/`Linkedin` icons (not present in the
-  installed lucide-react version — brand icons were dropped) for
-  `react-icons/fa6`'s `FaGithub`/`FaLinkedin`.
-- Verified: `npm run build` succeeds clean in `frontend/`. Backend starts
-  with `uvicorn api.index:app --port 8000` and correctly validates/rejects
-  requests (tested via curl — a submission without `RESEND_API_KEY` set
-  correctly 500s with a clear error, as expected).
-- Visually verified in Chrome by the user (dev servers work, no
-  `claude-in-chrome` tool access from this session — user drives the
-  browser and reports back/shares screenshots).
-- All real links now in `resumeData.js`: LinkedIn, GitHub profile, all 4
-  project repo links, all 5 cert/paper links (extracted from the resume
-  PDF's link annotations via `pypdf`, since the visible PDF text doesn't
-  carry the underlying URLs).
+  `.env.example`), loaded via `python-dotenv` if installed. Same two vars
+  are set in Vercel's project env vars for production.
+- All real links live in `resumeData.js`: LinkedIn, GitHub profile, all 4
+  project repo links, all 5 cert/paper links (originally extracted from the
+  resume PDF's link annotations via `pypdf`, since the visible PDF text
+  doesn't carry the underlying URLs).
+- Two projects now have live deployed demos, rendered as a "Live Demo" link
+  on the project card (`Projects.jsx`) next to "View on GitHub":
+  - Employee Management System —
+    https://employee-management-system-two-livid.vercel.app
+    (demo login shown on the card: `demo` / `Orbit5965!`)
+  - Crop Recommendation System —
+    https://crop-recommendation-ml.vercel.app/
+- Skills list (`skillGroups` in `resumeData.js`) expanded beyond the 1-page
+  resume, curated from what's actually installed/used on this machine
+  (cross-checked pip packages + VS Code extensions against real project
+  evidence, not just installed-but-unused tooling):
+  Django REST Framework, WebSockets (Socket.IO), Java, Spring Boot (added to
+  Backend & Frameworks); PyTorch, OpenCV (Automation & AI); MongoDB
+  (Databases — was already used in the Bank API project but missing from
+  the skills list); Maven, Gradle, Streamlit (Tools).
 - Education section extended with the two schools (HSC + SSC) the user
   left off the 1-page resume — see `education` array in `resumeData.js`.
 - About section eyebrow text changed from "Get to know me" to "Who I am"
   (grammar/redundancy fix, paired with the "About" heading).
+- Published an "Interview Runbook" artifact — a changelog + 30-question
+  interview prep bank pulled from the actual stack/project bullets, for the
+  user's own reference (not part of the site itself).
+
+## Deployment gotcha (already fixed, worth knowing)
+
+Root `requirements.txt` lists `fastapi`, which made Vercel auto-detect the
+**whole project** as a FastAPI framework preset. Per Vercel's own docs, a
+detected framework preset "takes precedence over file-based functions" and
+routes *every* request through it — so `/`, `/favicon.ico`, everything hit
+`api/index.py` and crashed with `ModuleNotFoundError: No module named
+'resend'` (the framework-preset build path also skipped the automatic
+`requirements.txt` install that normally applies to standalone `/api`
+functions). Fixed by adding `"framework": null` to `vercel.json`, which
+forces "Other" and restores the intended split: static frontend from
+`frontend/dist`, `api/index.py` as an independent file-based function for
+`/api/*` only. **If a future change to `requirements.txt` or `vercel.json`
+somehow removes that line, the site will silently 500 on every route again.**
 
 ## Still blocking full completion — need from the user
 
-- `.env` has a real `RESEND_API_KEY` locally now and the contact form was
-  verified end-to-end (test submission delivered to
-  `sarthaktarar750@gmail.com`). Still need the same `RESEND_API_KEY` and
-  `CONTACT_TO_EMAIL` added to Vercel's project env vars before production
-  deploy — local `.env` is gitignored and won't carry over.
+Nothing blocking right now. Optional next steps if the user wants them:
+- A custom domain instead of the `.vercel.app` one (needs to be purchased
+  from a registrar first, then added under Vercel → Settings → Domains).
+- Live demo links for the other two projects (Image Classification API,
+  Bank API) if/when those get deployed somewhere.
 
 ## Not yet done
 
-- Git repo setup / GitHub push / Vercel import (explained the flow to the
-  user, haven't executed it — waiting until content is finalized).
 - **Heads-up:** `C:\Users\sarthak` (the whole user home folder) is itself
   a git repo root with no commits — almost certainly unintentional. Do not
-  run git add/commit there. When setting up git for real, `git init` a
-  fresh repo scoped to `Portfolio/` specifically (it'll take precedence
-  for anything inside it without touching the outer one).
-- Resume PDF is already in `frontend/public/Sarthak_Tarar_Resume.pdf` —
-  download link works.
+  run git add/commit there. The `Portfolio/` repo (`git init` done, see
+  above) takes precedence for anything inside it without touching the
+  outer one.
 
 ## How to resume local dev
 

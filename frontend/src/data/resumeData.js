@@ -20,7 +20,18 @@ export const skillGroups = [
   },
   {
     label: "Backend & Frameworks",
-    skills: ["Django", "Flask", "FastAPI", "REST APIs", "SQLAlchemy", "Alembic"],
+    skills: [
+      "Django",
+      "Django REST Framework",
+      "Flask",
+      "FastAPI",
+      "Spring Boot",
+      "Java",
+      "REST APIs",
+      "WebSockets (Socket.IO)",
+      "SQLAlchemy",
+      "Alembic",
+    ],
   },
   {
     label: "Automation & AI",
@@ -32,13 +43,15 @@ export const skillGroups = [
       "NLP",
       "Machine Learning",
       "TensorFlow",
+      "PyTorch",
       "Keras",
       "Scikit-learn",
+      "OpenCV",
     ],
   },
   {
     label: "Databases",
-    skills: ["SQL Server", "Google Cloud SQL"],
+    skills: ["SQL Server", "Google Cloud SQL", "MongoDB"],
   },
   {
     label: "Cloud, DevOps & Observability",
@@ -66,7 +79,7 @@ export const skillGroups = [
   },
   {
     label: "Tools",
-    skills: ["Postman", "Git", "VS Code", "Windows", "Ubuntu", "MS Office"],
+    skills: ["Postman", "Git", "Maven", "Gradle", "Streamlit", "VS Code", "Windows", "Ubuntu", "MS Office"],
   },
 ];
 
@@ -109,6 +122,8 @@ export const projects = [
     description:
       "Web app streamlining employee data management: add/update/delete records, detail tracking, user-friendly forms.",
     github: "https://github.com/SarthakTarar/Employee-Management-System",
+    demo: "https://employee-management-system-two-livid.vercel.app",
+    demoCredentials: { username: "demo", password: "Orbit5965!" },
   },
   {
     name: "Crop Recommendation System",
@@ -116,6 +131,7 @@ export const projects = [
     description:
       "ML app recommending crops from soil/climate data using predictive models on historical data.",
     github: "https://github.com/SarthakTarar/Crop_Recommendation_ML",
+    demo: "https://crop-recommendation-ml.vercel.app/",
   },
   {
     name: "Image Classification API",

@@ -1,4 +1,4 @@
-import { FaGithub } from "react-icons/fa6";
+import { FaGithub, FaArrowUpRightFromSquare } from "react-icons/fa6";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import { projects } from "@/data/resumeData";
@@ -31,15 +31,35 @@ export default function Projects() {
                   ))}
                 </div>
 
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-text transition-colors group-hover:text-neon-purple"
-                >
-                  <FaGithub size={16} />
-                  View on GitHub
-                </a>
+                <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2">
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 text-sm font-medium text-text transition-colors group-hover:text-neon-purple"
+                  >
+                    <FaGithub size={16} />
+                    View on GitHub
+                  </a>
+
+                  {project.demo && (
+                    <a
+                      href={project.demo}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 text-sm font-medium text-neon-green transition-colors hover:text-neon-purple"
+                    >
+                      <FaArrowUpRightFromSquare size={13} />
+                      Live Demo
+                    </a>
+                  )}
+                </div>
+
+                {project.demoCredentials && (
+                  <p className="mt-3 font-mono text-xs text-text-dim">
+                    Demo login: {project.demoCredentials.username} / {project.demoCredentials.password}
+                  </p>
+                )}
               </article>
             </Reveal>
           ))}
