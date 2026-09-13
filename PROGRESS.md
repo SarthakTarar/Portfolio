@@ -10,7 +10,9 @@ if the conversation/session restarted.
 - **Email delivery:** Resend API (free tier, 3,000/mo).
 - **Deployment:** Single Vercel project — frontend build + FastAPI as one
   Python serverless function under `/api`, wired via `vercel.json` rewrites.
-  **Live at:** https://portfolio-eight-ruby-48.vercel.app/
+  **Live at:** https://sarthakt.vercel.app/ (renamed from the original
+  auto-generated `portfolio-eight-ruby-48.vercel.app` — that old alias is
+  now dead and returns `DEPLOYMENT_NOT_FOUND`, so don't reference it).
 - **Repo:** https://github.com/SarthakTarar/Portfolio (public), branch `main`.
   Pushing to `main` auto-redeploys on Vercel.
 - **Theme:** Dark, neon purple/blue/green, glassmorphism + glow-border cards,
