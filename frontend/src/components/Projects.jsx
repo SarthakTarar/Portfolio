@@ -36,6 +36,7 @@ export default function Projects() {
                     href={project.github}
                     target="_blank"
                     rel="noreferrer"
+                    data-cursor="code"
                     className="inline-flex items-center gap-2 text-sm font-medium text-text transition-colors group-hover:text-neon-purple"
                   >
                     <FaGithub size={16} />
@@ -47,6 +48,7 @@ export default function Projects() {
                       href={project.demo}
                       target="_blank"
                       rel="noreferrer"
+                      data-cursor="demo"
                       className="inline-flex items-center gap-2 text-sm font-medium text-neon-green transition-colors hover:text-neon-purple"
                     >
                       <FaArrowUpRightFromSquare size={13} />

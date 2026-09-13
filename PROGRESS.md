@@ -63,6 +63,17 @@ if the conversation/session restarted.
 - Published an "Interview Runbook" artifact — a changelog + 30-question
   interview prep bank pulled from the actual stack/project bullets, for the
   user's own reference (not part of the site itself).
+- Custom neon cursor (`frontend/src/components/Cursor.jsx`, mounted in
+  `App.jsx`): a precise dot plus a spring-trailing ring (Framer Motion
+  `useMotionValue`/`useSpring`) that grows and glows over interactive
+  elements, and shows a contextual label — `CODE` / `DEMO` on project card
+  links (`data-cursor` attributes in `Projects.jsx`), `GET` on the Resume
+  download (`Navbar.jsx`). Only enables on a real mouse with motion allowed
+  (`matchMedia("(hover: hover) and (pointer: fine)")` +
+  `prefers-reduced-motion` check) — native cursor stays untouched on touch
+  devices and for anyone who's opted out of motion. New Framer Motion
+  pattern (motion values/springs, not just `animate`/`whileInView`) — see
+  REACT_NOTES.md §11.
 
 ## Deployment gotcha (already fixed, worth knowing)
 

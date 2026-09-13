@@ -1,4 +1,5 @@
 import Background from "@/components/Background";
+import Cursor from "@/components/Cursor";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
@@ -12,6 +13,7 @@ function App() {
   return (
     <>
       <Background />
+      <Cursor />
       <Navbar />
       <main>
         <Hero />

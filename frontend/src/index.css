@@ -74,6 +74,14 @@ body {
   overflow-x: hidden;
 }
 
+/* Cursor.jsx adds this class only after confirming a real mouse + motion is
+   allowed, so the native cursor never disappears if JS fails or on a
+   touchscreen — see Cursor.jsx for the matching enable check. */
+html.cursor-custom,
+html.cursor-custom * {
+  cursor: none !important;
+}
+
 h1, h2, h3, h4 {
   font-family: var(--font-heading);
   letter-spacing: -0.02em;

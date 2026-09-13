@@ -42,6 +42,7 @@ export default function Navbar() {
         <a
           href={profile.resumeFile}
           download
+          data-cursor="get"
           className="glow-border glass hidden items-center gap-2 rounded-full px-4 py-2 text-sm font-medium md:inline-flex"
         >
           <Download size={15} />

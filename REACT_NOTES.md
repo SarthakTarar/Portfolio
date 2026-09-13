@@ -57,7 +57,7 @@ export default function SectionHeading({ eyebrow, title, subtitle }) {
 the function signature. Used like:
 
 ```jsx
-<SectionHeading eyebrow="Get to know me" title="About" />
+<SectionHeading eyebrow="Who I am" title="About" />
 ```
 
 `subtitle` wasn't passed here, so inside the component it's `undefined`, and
@@ -284,7 +284,74 @@ plays the `exit` animation first, and *then* actually unmounts it.
 
 ---
 
-## 11. Project structure conventions used here
+## 11. Motion values & springs — the custom cursor (`Cursor.jsx`)
+
+Everything in section 10 animates *toward a fixed target* (`animate={{...}}`).
+The custom cursor needs something that tracks a value that changes 60 times a
+second — the mouse position — without React re-rendering the component on
+every single pixel. That's what `useMotionValue` and `useSpring` are for:
+
+```jsx
+const mouseX = useMotionValue(-100);       // a value Framer tracks outside React state
+const ringX = useSpring(mouseX, { stiffness: 300, damping: 28, mass: 0.5 });
+```
+
+- `useMotionValue` holds a number that can change constantly *without*
+  triggering a re-render — calling `mouseX.set(e.clientX)` on every
+  `mousemove` would be far too expensive as `useState`.
+- `useSpring` wraps another motion value and animates toward it using actual
+  spring physics (`stiffness`/`damping`/`mass`, not a duration). The result
+  lags behind the input in a way that feels alive instead of instant — that's
+  the "trailing ring" effect. The dot uses `mouseX`/`mouseY` directly (zero
+  lag, exactly under the pointer); the ring uses the sprung version.
+- `style={{ x: mouseX, y: mouseY }}` — passing a motion value straight into
+  `style` is how Framer moves the element every frame via `transform`,
+  bypassing React's render cycle entirely (this is *why* it's fast).
+
+**Feature-detecting instead of assuming** — the cursor shouldn't exist on a
+touchscreen or for someone who's asked their OS to reduce motion:
+
+```js
+const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (!canHover || reduced) return;
+```
+
+`matchMedia` lets JS ask the same questions a CSS `@media` query would. The
+component simply returns `null` (renders nothing) when either check fails,
+so devices without a real mouse — or users who've opted out of motion — just
+get the normal system cursor.
+
+**Escaping React for one DOM detail** — hiding the native cursor is a
+document-wide style, not something scoped to one component's own markup, so
+it's set the imperative way instead of through JSX:
+
+```js
+document.documentElement.classList.add("cursor-custom");
+```
+
+paired with a CSS rule in `index.css` (`html.cursor-custom, html.cursor-custom
+* { cursor: none !important; }`). The class is added *only* after the feature
+checks above pass, and removed again in the `useEffect` cleanup — so if
+anything goes wrong, the native cursor is never left invisible.
+
+**Reading custom data attributes off whatever's under the pointer**:
+
+```jsx
+const target = e.target.closest(`${HOVER_SELECTOR}, [data-cursor]`);
+setLabel(target?.dataset.cursor ?? "");
+```
+
+Any DOM element can carry `data-*` attributes as plain HTML — React exposes
+them on `element.dataset` (camelCased: `data-cursor` → `dataset.cursor`).
+`Projects.jsx` and `Navbar.jsx` tag their real links with
+`data-cursor="code"` / `"demo"` / `"get"`; the cursor reads whichever one is
+currently under the pointer and shows it as a label, so the ring can react to
+content without those components needing to know the cursor exists.
+
+---
+
+## 12. Project structure conventions used here
 
 ```
 src/
